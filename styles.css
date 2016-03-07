@@ -1,5 +1,8 @@
-body {
+html, body {
         font-family:Arial;
+        width: 100%;
+        margin: 0;
+        padding: 0;
 }
 
 .red {
@@ -11,36 +14,35 @@ body {
 }
 
 .network {
-        border:1px solid;
-        padding-top:5px;
-        padding-left:5px;
 }
 
 .tableft {
         text-align:right;
         width:50px;
-	display:inline-block;
+	      display:inline-block;
 }
 
 .menu {
-        float:left;
-        width:9%;
-	height:100%;
-	text-align:center;
+	      text-align:center;
 }
 
 .content {
-        border:1px solid;
         float:left;
-        width:90%;
+        width:100%;
         height:100%;
-	padding:3px;
+	      padding:3px;
 }
 
 .header {
-        float:left;
-        width:99%;
-	text-align:center;
+        width:100%;
+        background-color: red;
+	      text-align:center;
+}
+
+.header h2 {
+  color: white;
+  font-size: 8vw;
+  margin: 0;
 }
 
 textarea {
@@ -49,8 +51,16 @@ textarea {
 }
 
 input.button {
-        width:80%;
-        border:1px solid;
+        width:200px;
+        margin: 4px;
+}
+
+.button-hotspot {
+  display: none;
+}
+
+.button-dhcp {
+  display: none;
 }
 
 .footer {
@@ -60,12 +70,10 @@ input.button {
 }
 
 input[type=text],input[type=password] {
-	border:1px solid;
 }
 
 input[type=button],input[type=submit] {
-	border:1px solid;
-	border-radius:15px;
+  text-align:center;
 }
 
 input[type=button]:hover {
@@ -76,12 +84,11 @@ input[type=submit]:hover {
 }
 
 .infoheader {
-	font-size:18px;
+	font-size:5vw;
 	font-weight:bold;
 	width:100%;
 	text-align:center;
 	margin-top:10px;
-	border-bottom:1px solid;
 }
 
 .infobox {
@@ -89,10 +96,7 @@ input[type=submit]:hover {
 }
 
 #intinfo {
-	width:48%;
-	padding-left:10px;
-	border-right:1px solid;
-	float:left;
+	width:100%;
 }
 
 #wifiinfo {
@@ -110,7 +114,5 @@ input[type=submit]:hover {
 
 .intfooter {
 	width:100%;
-	border-top:1px solid;
-	float:left;
 	text-align:center;
 }

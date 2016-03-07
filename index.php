@@ -8,23 +8,20 @@ echo '<html>
 <head>
 <link href="styles.css" rel="stylesheet" type="text/css"></link>
 <script type="text/Javascript" src="functions.js"></script>
-<title>Raspbian WiFi Configuration Portal</title>
+<title>Kitchen Pager</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 <body>
 <div class="header">
-<h2>Raspbian WiFi Configuration Portal</h2>
+<h2>Kitchen Pager Configuration</h2>
 </div>
+<div class="content">
 <div class="menu">
-<input class="button" type="button" value="WiFi
-Info" name="wlan0_info" onclick="document.location=\'?page=\'+this.name" />
-<input class="button" type="button" value="Configure
-Client" name="wpa_conf" onclick="document.location=\'?page=\'+this.name" />
-<input class="button" type="button" value="Configure
-Hotspot" name="hostapd_conf" onclick="document.location=\'?page=\'+this.name" />
-<input class="button" type="button" value="Configure
-DHCP Server" name="dhcpd_conf" onclick="document.location=\'?page=\'+this.name" />
-</div>
-<div class="content">';
+<a class="button" href="#" name="wlan0_info" onclick="document.location=\'?page=\'+this.name">Info</a> -
+<a class="button" href="#" name="wpa_conf" onclick="document.location=\'?page=\'+this.name">WiFi</a>
+<a class="button-hotspot" name="hostapd_conf" onclick="document.location=\'?page=\'+this.name">Configure Hotspot</a>
+<a class="button-dhcp" name="dhcpd_conf" onclick="document.location=\'?page=\'+this.name"> Configure DHCP Server</a>
+</div>';
 switch($page) {
 	case "dhcpd_conf":
 		exec('cat /etc/dnsmasq.conf',$return);
@@ -123,12 +120,12 @@ dhcp-range='.$_POST['RangeStart'].','.$_POST['RangeEnd'].',255.255.255.0,'.$_POS
 		$strRxPackets = $result[1];
 		preg_match('/TX packets:(\d+)/',$strWlan0,$result);
 		$strTxPackets = $result[1];
-		preg_match('/RX Bytes:(\d+ \(\d+.\d+ MiB\))/i',$strWlan0,$result);
+		preg_match('/RX Bytes:(\d+ \(\d+.\d+ [K|M|G]iB\))/i',$strWlan0,$result);
 		$strRxBytes = $result[1];
 		preg_match('/TX Bytes:(\d+ \(\d+.\d+ [K|M|G]iB\))/i',$strWlan0,$result);
 		$strTxBytes = $result[1];
-		preg_match('/ESSID:\"([a-zA-Z0-9\s]+)\"/i',$strWlan0,$result);
-		$strSSID = str_replace('"','',$result[1]);
+		preg_match('/ESSID:\"([a-zA-Z0-9\S\s]+)\"/i',$strWlan0,$result);
+		$strSSID = $result[1];
 		preg_match('/Access Point: ([0-9a-f:]+)/i',$strWlan0,$result);
 		$strBSSID = $result[1];
 		preg_match('/Bit Rate=([0-9]+ Mb\/s)/i',$strWlan0,$result);
@@ -160,35 +157,29 @@ dhcp-range='.$_POST['RangeStart'].','.$_POST['RangeEnd'].',255.255.255.0,'.$_POS
 			}
 		}
 	echo '<div class="infobox">
-<form action="/?page=wlan0_info" method="POST">
-<input type="submit" value="ifdown wlan0" name="ifdown_wlan0" />
-<input type="submit" value="ifup wlan0" name="ifup_wlan0" />
-<input type="button" value="Refresh" onclick="document.location.reload(true)" />
-</form>
-<div class="infoheader">Wireless Information and Statistics</div>
-<div id="intinfo"><div class="intheader">Interface Information</div>
-Interface Name : wlan0<br />
-Interface Status : ' . $strStatus . '<br />
-IP Address : ' . $strIPAddress . '<br />
-Subnet Mask : ' . $strNetMask . '<br />
-Mac Address : ' . $strHWAddress . '<br />
-<div class="intheader">Interface Statistics</div>
-Received Packets : ' . $strRxPackets . '<br />
-Received Bytes : ' . $strRxBytes . '<br /><br />
-Transferred Packets : ' . $strTxPackets . '<br />
-Transferred Bytes : ' . $strTxBytes . '<br />
-</div>
-<div id="wifiinfo">
-<div class="intheader">Wireless Information</div>
-Connected To : ' . $strSSID . '<br />
-AP Mac Address : ' . $strBSSID . '<br />
-Bitrate : ' . $strBitrate . '<br />
-Transmit Power : ' . $strTxPower .'<br />
-Link Quality : ' . $strLinkQuality . '<br />
-Signal Level : ' . $strSignalLevel . '<br />
-</div>
-</div>
-<div class="intfooter">Information provided by ifconfig and iwconfig</div>';
+<div id="intinfo">
+	<div class="intheader">Interface Information</div>
+	Interface Name : wlan0<br />
+	Interface Status : ' . $strStatus . '<br />
+	IP Address : ' . $strIPAddress . '<br />
+	Subnet Mask : ' . $strNetMask . '<br />
+	Mac Address : ' . $strHWAddress . '<br />
+	<div class="intheader">Interface Statistics</div>
+	Received Packets : ' . $strRxPackets . '<br />
+	Received Bytes : ' . $strRxBytes . '<br /><br />
+	Transferred Packets : ' . $strTxPackets . '<br />
+	Transferred Bytes : ' . $strTxBytes . '<br />
+	<div class="intheader">Wireless Information</div>
+	Connected To : ' . $strSSID . '<br />
+	AP Mac Address : ' . $strBSSID . '<br />
+	Bitrate : ' . $strBitrate . '<br />
+	Transmit Power : ' . $strTxPower .'<br />
+	Link Quality : ' . $strLinkQuality . '<br />
+	Signal Level : ' . $strSignalLevel . '<br />
+	<form action="/?page=wlan0_info" method="POST">
+	<input type="button" value="Refresh" onclick="document.location.reload(true)" />
+	</form>
+</div>';
 	break;
 
 	case "wpa_conf":
