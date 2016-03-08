@@ -201,7 +201,7 @@ dhcp-range='.$_POST['RangeStart'].','.$_POST['RangeEnd'].',255.255.255.0,'.$_POS
 		for($ssids = 0; $ssids < $numSSIDs; $ssids++) {
 			$output .= '<div id="Networkbox'.$ssids.'" class="NetworkBoxes">Network '.$ssids.' <input type="button" value="Delete" onClick="DeleteNetwork('.$ssids.')" /></span><br />
 <span class="tableft" id="lssid0">SSID :</span><input type="text" id="ssid0" name="ssid'.$ssids.'" value="'.$ssid[$ssids].'" onkeyup="CheckSSID(this)" /><br />
-<span class="tableft" id="lpsk0">PSK :</span><input type="password" id="psk0" name="psk'.$ssids.'" value="'.$psk[$ssids].'" onkeyup="CheckPSK(this)" /></div>';
+<span class="tableft" id="lpsk0">Passkey :</span><input type="password" id="psk0" name="psk'.$ssids.'" value="'.$psk[$ssids].'" onkeyup="CheckPSK(this)" /></div>';
 		}
 		$output .= '</div><input type="submit" value="Scan for Networks" name="Scan" /><input type="button" value="Add Network" onClick="AddNetwork();" /><input type="submit" value="Save" name="SaveWPAPSKSettings" onmouseover="UpdateNetworks(this)" id="Save" disabled />
 </form>';
@@ -240,7 +240,6 @@ update_config=1
 		for($shift = 0; $shift < 4; $shift++ ) {
 			array_shift($return);
 		}
-		echo "Networks found : <br />";
 		foreach($return as $network) {
 			$arrNetwork = preg_split("/[\t]+/",$network);
 			$bssid = $arrNetwork[0];
@@ -248,8 +247,7 @@ update_config=1
 			$signal = $arrNetwork[2] . " dBm";
 			$security = $arrNetwork[3];
 			$ssid = $arrNetwork[4];
-			echo '<input type="button" value="Connect to This network" onClick="AddScanned(\''.$ssid.'\')" />' . $ssid . " on channel " . $channel . " with " . $signal . "(".ConvertToSecurity($security)." Security)<br />";
-
+			echo '<div class="etwork_item">' . $ssid . " on channel " . $channel . " with " . $signal . "(".ConvertToSecurity($security).' Security)<br /><input type="button" value="Connect" onClick="AddScanned(\''.$ssid.'\')" /></div>';
 		}
 	}
 
@@ -345,23 +343,15 @@ ctrl_interface=/var/run/hostapd
 ctrl_interface_group=0
 beacon_int=100
 auth_algs=1
-wpa_key_mgmt=WPA-PSK
-';
-		$config .= "interface=".$_POST['interface']."
-";
-		$config .= "ssid=".$_POST['ssid']."
-";
-		$config .= "hw_mode=".$_POST['hw_mode']."
-";
-		$config .= "channel=".$_POST['channel']."
-";
-$config .= "wpa=".$_POST['wpa']."
-";
-$config .='wpa_passphrase='.$_POST['wpa_passphrase'].'
-';
-$config .="wpa_pairwise=".$_POST['wpa_pairwise']."
-";
-$config .="country_code=".$_POST['country_code'];
+wpa_key_mgmt=WPA-PSK';
+		$config .= "interface=".$_POST['interface']."";
+		$config .= "ssid=".$_POST['ssid']."";
+		$config .= "hw_mode=".$_POST['hw_mode']."";
+		$config .= "channel=".$_POST['channel']."";
+		$config .= "wpa=".$_POST['wpa']."";
+		$config .='wpa_passphrase='.$_POST['wpa_passphrase'].'';
+		$config .="wpa_pairwise=".$_POST['wpa_pairwise']."";
+		$config .="country_code=".$_POST['country_code'];
 	exec("echo '$config' > /tmp/hostapddata",$return);
 	system("sudo cp /tmp/hostapddata /etc/hostapd/hostapd.conf",$return);
 	if($return == 0) {
@@ -385,6 +375,9 @@ $config .="country_code=".$_POST['country_code'];
 }
 	break;
 
+case "TR Setup":
+
+break;
 }
 
 
